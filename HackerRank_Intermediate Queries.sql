@@ -35,3 +35,25 @@ FROM
   ) AS T3 
 ORDER BY 
   T3.COL1
+
+
+/*
+OCCUPATIONS
+Pivot the Occupation column in OCCUPATIONS so that each Name is sorted alphabetically and displayed underneath its corresponding Occupation. The output column headers should be Doctor, Professor, Singer, and Actor, respectively.
+
+Note: Print NULL when there are no more names corresponding to an occupation.
+*/
+ 
+SELECT 
+  MAX(CASE WHEN Occupation = 'Doctor' THEN Name END) 'Doctor', 
+  MAX(CASE WHEN Occupation = 'Professor' THEN Name END) 'Professor', 
+  MAX(CASE WHEN Occupation = 'Singer' THEN Name END) 'Singer', 
+  MAX(CASE WHEN Occupation = 'Actor' THEN Name END) 'Actor' 
+FROM 
+  (
+    select 
+      *, 
+      ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name) AS rn FROM OCCUPATIONS
+  ) t 
+group by 
+  rn
